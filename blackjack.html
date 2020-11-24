@@ -17,14 +17,15 @@
 
         <div class="card border-dark mb-3" style="max-width: 18rem;">
             <div class="card-header">Player 1:</div>
-            <div class="card-body text-dark">
-                <img id="player1image" src="http://deckofcardsapi.com/static/img/AH.png" alt="playing-card">
+            <div class="card-body text-dark row" id="player1Body">
+                <img id="player1image" class="col-md-6" src="./back.png" alt="playing-card">
+
             </div>
         </div>
         <div class="card border-dark mb-3" style="max-width: 18rem;">
             <div class="card-header">Player 2:</div>
-            <div class="card-body text-dark">
-                <img id="player2image" src="http://deckofcardsapi.com/static/img/AS.png" alt="playing-card">
+            <div class="card-body text-dark row" id="player2Body">
+                <img id="player2image" class="col-md-6" src="./back.png" alt="playing-card">
             </div>
         </div>
         <h1></h1>
@@ -45,24 +46,54 @@
         const cardsNumbers = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'J', 'Q', 'K']
         const cardsTypes = ['C', ' D', 'H', 'S']
 
+
+        const cardsObject = {
+            'A': 11, '2': 2, '3': 3, '4': 4,
+            '5': 5, '6': 6, '7': 7, '8': 8,
+            '9': 9, '0': 10, 'J': 10,
+            'Q': 10, 'K': 10
+        }
+
         const randItem = (arr) => arr[Math.floor(Math.random() * arr.length)]
+
+        var randomProperty = function (obj) {
+            var entries = Object.entries(obj);
+            return randItem(entries)
+        };
+
+        const addCard = (body, card, suit) => {
+            var img = document.createElement("img");
+            $(img).addClass('col-md-6')
+            $(img).attr('src', `http://deckofcardsapi.com/static/img/${card}${suit}.png`)
+
+            document.getElementById(body).appendChild(img)
+
+        }
 
         $('button').click(function (e) {
             e.preventDefault();
-            let firstNumber = randItem(cardsNumbers).trim()
-            let secondNumber = randItem(cardsNumbers).trim()
+
+            let firstNumber = randomProperty(cardsObject)
+            let secondNumber = randomProperty(cardsObject)
             let firstSuit = randItem(cardsTypes).trim()
             let secondSuit = randItem(cardsTypes).trim()
+            /* let firstNumber = randItem(cardsNumbers).trim()
+            let secondNumber = randItem(cardsNumbers).trim()
+            let firstSuit = randItem(cardsTypes).trim()
+            let secondSuit = randItem(cardsTypes).trim() */
 
-            $('#player1image').attr('src', `http://deckofcardsapi.com/static/img/${firstNumber}${firstSuit}.png`);
-            $('#player2image').attr('src', `http://deckofcardsapi.com/static/img/${secondNumber}${secondSuit}.png`);
+            addCard("player1Body", firstNumber[0], firstSuit)
+            addCard("player2Body", secondNumber[0], secondSuit)
+
+            // $('#player1image').attr('src', `http://deckofcardsapi.com/static/img/${firstNumber[0]}${firstSuit}.png`);
+            // $('#player2image').attr('src', `http://deckofcardsapi.com/static/img/${secondNumber[0]}${secondSuit}.png`);
 
             // ⚠ Change the cardsNumbers array to object for a better card comparession 
             // ⚠ example cardsNumbers = {'A':11,'2':2,'3':3,.....'J':10,'Q':10,'K':10,}
 
-            if (cardsNumbers.indexOf(firstNumber) > cardsNumbers.indexOf(secondNumber)) {
+            if (firstNumber[1] > secondNumber[1]) {
                 document.querySelector('h1').innerText = 'Player 1 Wins !'
-            } else if (cardsNumbers.indexOf(firstNumber) < cardsNumbers.indexOf(secondNumber)) {
+            } else if (firstNumber[1] < secondNumber[1]) {
                 document.querySelector('h1').innerText = 'Player 2 Wins !'
             } else {
                 document.querySelector('h1').innerText = 'Draw 😊'
